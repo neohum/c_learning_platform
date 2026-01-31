@@ -28,6 +28,22 @@ You need to have the following installed on your system:
 - **npm** or **pnpm**
 - **GCC** (GNU Compiler Collection)
 
+## Configuration
+
+### Execution Timeout
+
+프로그램 실행 시간 제한을 설정할 수 있습니다:
+
+- **기본값**: 30초
+- **설정 방법**: `.env.local` 파일에 `EXECUTION_TIMEOUT` 추가
+
+```env
+# 60초로 설정
+EXECUTION_TIMEOUT=60000
+```
+
+자세한 내용은 [TIMEOUT_CONFIG.md](./TIMEOUT_CONFIG.md)를 참고하세요.
+
 ### Installing GCC
 
 **Windows:**

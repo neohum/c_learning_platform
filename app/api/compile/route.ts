@@ -8,6 +8,9 @@ import { existsSync } from 'fs';
 
 const execAsync = promisify(exec);
 
+// 실행 시간 제한 (밀리초) - 환경 변수로 설정 가능
+const EXECUTION_TIMEOUT = parseInt(process.env.EXECUTION_TIMEOUT || '30000'); // 기본 30초
+
 interface CompileRequest {
   code: string;
   input?: string;
@@ -80,7 +83,7 @@ export async function POST(request: NextRequest) {
         }
 
         const { stdout, stderr } = await execAsync(execCommand, {
-          timeout: 5000,
+          timeout: EXECUTION_TIMEOUT,
           maxBuffer: 1024 * 1024 // 1MB buffer
         });
 
@@ -99,7 +102,7 @@ export async function POST(request: NextRequest) {
         if (runError.killed || runError.signal === 'SIGTERM') {
           return NextResponse.json({
             success: false,
-            error: '프로그램 실행 시간이 초과되었습니다 (5초 제한)',
+            error: `프로그램 실행 시간이 초과되었습니다 (${EXECUTION_TIMEOUT / 1000}초 제한)\n무한 루프나 입력 대기 상태를 확인하세요.`,
             stage: 'runtime'
           } as CompileResult);
         }
